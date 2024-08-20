@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Solver</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 5px;
+        }
+
+        td {
+            border: 1px solid rgb(186, 46, 46);
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: center;
+        }
+
+        input {
+            width: 38px;
+            height: 38px;
+            text-align: center;
+            border: none;
+            font-size: 18px;
+            background-color: transparent;
+        }
+
+        td:nth-child(3n) {
+            border-right: 2px solid rgb(186, 46, 46);
+        }
+
+        tr:nth-child(3n) td {
+            border-bottom: 2px solid rgb(186, 46, 46);
+        }
+
+        td:first-child {
+            border-left: 2px solid rgb(186, 46, 46);
+        }
+
+        tr:first-child td {
+            border-top: 2px solid rgb(186, 46, 46)black;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:active {
+            background-color: #3e8e41;
+        }
+
+        section {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            background: radial-gradient(#333, #000);
+            z-index: -1;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .leaf div {
+            position: absolute;
+            display: block;
+        }
+
+        .leaf div:nth-child(1) {
+            left: 20%;
+            animation: fall 15s linear infinite;
+            animation-delay: -2s;
+        }
+
+        .leaf div:nth-child(2) {
+            left: 70%;
+            animation: fall 15s linear infinite;
+            animation-delay: -4s;
+        }
+
+        .leaf div:nth-child(3) {
+            left: 10%;
+            animation: fall 20s linear infinite;
+            animation-delay: -7s;
+        }
+
+        .leaf div:nth-child(4) {
+            left: 50%;
+            animation: fall 18s linear infinite;
+            animation-delay: -5s;
+        }
+
+        .leaf div:nth-child(5) {
+            left: 85%;
+            animation: fall 14s linear infinite;
+            animation-delay: -5s;
+        }
+
+        .leaf div:nth-child(6) {
+            left: 15%;
+            animation: fall 16s linear infinite;
+            animation-delay: -10s;
+        }
+
+        .leaf div:nth-child(7) {
+            left: 90%;
+            animation: fall 15s linear infinite;
+            animation-delay: -4s;
+        }
+
+        @keyframes fall {
+            0% {
+                opacity: 1;
+                top: -10%;
+                transform: translateX(20px) rotate(0deg);
+            }
+
+            20% {
+                opacity: 0.8;
+                transform: translateX(-20px) rotate(45deg);
+            }
+
+            40% {
+                transform: translateX(-20px) rotate(90deg);
+            }
+
+            60% {
+                transform: translateX(-20px) rotate(135deg);
+            }
+
+            80% {
+                transform: translateX(-20px) rotate(180deg);
+            }
+
+            100% {
+                top: 110%;
+                transform: translateX(-20px) rotate(225deg);
+            }
+        }
+
+        .leaf1 {
+            transform: rotateX(180deg);
+        }
+
+        h2 {
+            position: absolute;
+            top: 40%;
+            width: 100%;
+            font-family: 'Courgette', cursive;
+            font-size: 4em;
+            text-align: center;
+            transform: translateY(-50%);
+            color: #fff;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <section>
+        <h1>Sudoku Solver</h1>
+
+      </div>
+         <div class="leaf">
+         <div>  <img src="http://www.pngmart.com/files/1/Fall-Autumn-Leaves-Transparent-PNG.png" height="75px" width="75px"></img></div>
+          <div><img src="http://www.pngmart.com/files/1/Autumn-Fall-Leaves-Pictures-Collage-PNG.png" height="75px" width="75px"></img></div>
+          <div>  <img src="http://www.pngmart.com/files/1/Autumn-Fall-Leaves-Clip-Art-PNG.png" height="75px" width="75px" ></img></div>
+          <div><img  src="http://www.pngmart.com/files/1/Green-Leaves-PNG-File.png" height="75px" width="75px"></img></div>
+           <div> <img src="http://www.pngmart.com/files/1/Transparent-Autumn-Leaves-Falling-PNG.png" height="75px" width="75px"></img></div>
+         <div>   <img src="http://www.pngmart.com/files/1/Realistic-Autumn-Fall-Leaves-PNG.png" height="75px" width="75px"></div>
+         <div><img src="http://cdn.clipart-db.ru/rastr/autumn_leaves_025.png" height="75px" width="75px"></div>
+                
+         </div>
+         
+         <div class="leaf leaf1">
+         <div>  <img src="http://www.pngmart.com/files/1/Fall-Autumn-Leaves-Transparent-PNG.png" height="75px" width="75px"></img></div>
+          <div><img src="http://www.pngmart.com/files/1/Autumn-Fall-Leaves-Pictures-Collage-PNG.png" height="75px" width="75px"></img></div>
+          <div>  <img src="http://www.pngmart.com/files/1/Autumn-Fall-Leaves-Clip-Art-PNG.png" height="75px" width="75px" ></img></div>
+          <div><img  src="http://www.pngmart.com/files/1/Green-Leaves-PNG-File.png" height="75px" width="75px"></img></div>
+           <div> <img src="http://www.pngmart.com/files/1/Transparent-Autumn-Leaves-Falling-PNG.png" height="75px" width="75px"></img></div>
+         <div>   <img src="http://www.pngmart.com/files/1/Realistic-Autumn-Fall-Leaves-PNG.png" height="75px" width="75px"></div>
+         <div><img src="http://cdn.clipart-db.ru/rastr/autumn_leaves_025.png" height="75px" width="75px"></div>
+                
+         </div>
+         
+         <div class="leaf leaf2">
+         <div>  <img src="http://www.pngmart.com/files/1/Fall-Autumn-Leaves-Transparent-PNG.png" height="75px" width="75px"></img></div>
+          <div><img src="http://www.pngmart.com/files/1/Autumn-Fall-Leaves-Pictures-Collage-PNG.png" height="75px" width="75px"></img></div>
+          <div>  <img src="http://www.pngmart.com/files/1/Autumn-Fall-Leaves-Clip-Art-PNG.png" height="75px" width="75px" ></img></div>
+          <div><img  src="http://www.pngmart.com/files/1/Green-Leaves-PNG-File.png" height="75px" width="75px"></img></div>
+    
+           <div> <img src="http://www.pngmart.com/files/1/Transparent-Autumn-Leaves-Falling-PNG.png" height="75px" width="75px"></img></div>
+         <div>   <img src="http://www.pngmart.com/files/1/Realistic-Autumn-Fall-Leaves-PNG.png" height="75px" width="75px"></div>
+         <div><img src="http://cdn.clipart-db.ru/rastr/autumn_leaves_025.png" height="75px" width="75px"></div>
+                
+         </div>
+         </section>
+    <table>
+        <tbody id="sudoku-grid">
+
+        </tbody>
+    </table>
+    <div class="btn">
+        <button id="solve-btn">Solve</button>
+        <button onclick="setPuzzle('easy')">Easy</button>
+        <button onclick="setPuzzle('medium')">Medium</button>
+        <button onclick="setPuzzle('hard')">Hard</button>
+    </div>
+    <script>
+        const puzzles = {
+            easy: [
+                [5, 3, 0, 0, 7, 0, 0, 0, 0],
+                [6, 0, 0, 1, 9, 5, 0, 0, 0],
+                [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            ],
+            medium: [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 9, 5, 0, 0, 0],
+                [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            ],
+            hard: [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 9, 5, 0, 0, 0],
+                [0, 9, 8, 0, 0, 0, 0, 6, 0],
+                [8, 0, 0, 0, 6, 0, 0, 0, 3],
+                [4, 0, 0, 8, 0, 3, 0, 0, 1],
+                [7, 0, 0, 0, 2, 0, 0, 0, 6],
+                [0, 6, 0, 0, 0, 0, 2, 8, 0],
+                [0, 0, 0, 4, 1, 9, 0, 0, 5],
+                [0, 0, 0, 0, 8, 0, 0, 7, 9]
+            ]
+        };
+
+        let grid;
+
+        function displayGrid(grid) {
+            const table = $('#sudoku-grid');
+            table.empty();
+            for (let row = 0; row < 9; row++) {
+                let tr = $('<tr>');
+                for (let col = 0; col < 9; col++) {
+                    let td = $('<td>');
+                    let input = $('<input>', {
+                        type: 'text',
+                        maxlength: 1,
+                        value: grid[row][col] === 0 ? '' : grid[row][col],
+                        input: function () {
+                            grid[row][col] = this.value === '' ? 0 : parseInt(this.value, 10);
+                        }
+                    });
+                    td.append(input);
+                    tr.append(td);
+                }
+                table.append(tr);
+            }
+        }
+
+        function isValid(grid, row, col, num) {
+            for (let i = 0; i < 9; i++) {
+                if (grid[row][i] === num || grid[i][col] === num) {
+                    return false;
+                }
+            }
+
+            let startRow = Math.floor(row / 3) * 3;
+            let startCol = Math.floor(col / 3) * 3;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (grid[startRow + i][startCol + j] === num) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function findEmptyCell(grid) {
+            for (let row = 0; row < 9; row++) {
+                for (let col = 0; col < 9; col++) {
+                    if (grid[row][col] === 0) {
+                        return [row, col];
+                    }
+                }
+            }
+            return null;
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function solveSudoku(grid) {
+            let emptyCell = findEmptyCell(grid);
+            if (!emptyCell) {
+                return true;
+            }
+
+            let [row, col] = emptyCell;
+
+            for (let num = 1; num <= 9; num++) {
+                if (isValid(grid, row, col, num)) {
+                    grid[row][col] = num;
+                    displayGrid(grid);
+                    await sleep(100); // Adjust the delay as needed
+
+                    if (await solveSudoku(grid)) {
+                        return true;
+                    }
+
+                    grid[row][col] = 0;
+                    displayGrid(grid);
+                    await sleep(100); // Adjust the delay as needed
+                }
+            }
+
+            return false;
+        }
+
+        async function solvePuzzle() {
+            if (await solveSudoku(grid)) {
+                alert("Sudoku puzzle solved!");
+            } else {
+                alert("No solution exists for the given Sudoku puzzle.");
+            }
+            displayGrid(grid);
+        }
+
+        function setPuzzle(difficulty) {
+            grid = puzzles[difficulty];
+            displayGrid(grid);
+        }
+
+        // Initial display of the grid
+        $(document).ready(() => {
+            grid = puzzles.easy; // Default to the easy puzzle
+            displayGrid(grid);
+        });
+
+        $('#solve-btn').click(solvePuzzle);
+    </script>
+</body>
+
+</html>
